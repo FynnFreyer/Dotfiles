@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Application
-Exec=update-monitor-position
+Exec=update-monitor-position 3
 Hidden=true
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
