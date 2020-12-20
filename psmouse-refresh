@@ -1,8 +1,0 @@
-#!/bin/bash
-# gehört in /lib/systemd/system-sleep/
-# lädt das Kernelmodul psmouse für das Touchpad neu
-if [[ $1 == post ]]; then
-    modprobe -r psmouse
-    modprobe psmouse
-    ;;
-fi

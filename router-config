@@ -1,8 +1,0 @@
-#!/bin/bash
-printf "connecting to server...\n"
-ssh -fNTD 1080 fynn@fynns.space
-printf "connected\nlaunching browser...\n"
-firefox 192.168.0.1 &> /dev/null
-printf "tearing down connection...\n"
-pkill -f "ssh -fNTD 1080 fynn@fynns.space"
-printf "done\n"
