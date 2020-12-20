@@ -1,0 +1,11 @@
+#!/bin/bash
+
+apt update && apt upgrade -yq
+apt install -yq --no-install-recommends \
+	gparted \
+	exfat-utils \
+	git \
+	stow \
+	neovim
+
+reboot
