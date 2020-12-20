@@ -1,0 +1,63 @@
+#!/bin/bash
+# -------------------------------------------------
+#  Get monitors configuration from monitor.xml and apply it for current user session.
+#  In case of multiple definitions in monitor.xml only first one is used.
+#
+#  See http://bernaerts.dyndns.org/linux/74-ubuntu/309-ubuntu-dual-display-monitor-position-lost
+#  for instructions
+#
+#  Parameters :
+#    $1 : waiting time in sec. before forcing configuration (optional)
+#
+#  Revision history :
+#    19/04/2014, V1.0 - Creation by N. Bernaerts
+#    10/07/2014, V1.1 - Wait 5 seconds for X to fully initialize
+#    01/09/2014, V1.2 - Correct NULL file bug (thanks to Ivan Harmady) and handle rotation
+#    07/10/2014, V1.3 - Add monitors size and rate handling (idea from jescalante)
+#    08/10/2014, V1.4 - Handle primary display parameter
+#    08/12/2014, V1.5 - Waiting time in seconds becomes a parameter
+#    20/12/2020, V1.6 - Tweak XPaths to comply with modern monitors.xml structure (lost rotation handling)
+# -------------------------------------------------
+
+# monitor.xml path
+MONITOR_XML="$HOME/.config/monitors.xml"
+
+# get number of declared monitors
+NUM=$(xmllint --xpath 'count(//monitors/configuration['1']/logicalmonitor)' $MONITOR_XML)
+
+# loop through declared monitors to create the command line parameters
+for (( i=1; i<=$NUM; i++)); do
+  # get attributes of current monitor (name and x & y positions)
+  NAME=$(xmllint --xpath 'string(//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/monitor/monitorspec/connector/text())' $MONITOR_XML 2>/dev/null)
+  POS_X=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/x/text()' $MONITOR_XML 2>/dev/null)
+  POS_Y=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/y/text()' $MONITOR_XML 2>/dev/null)
+  WIDTH=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/monitor/mode/width/text()' $MONITOR_XML 2>/dev/null)
+  HEIGHT=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/monitor/mode/height/text()' $MONITOR_XML 2>/dev/null)
+  RATE=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/monitor/mode/rate/text()' $MONITOR_XML 2>/dev/null)
+  PRIMARY=$(xmllint --xpath '//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/primary/text()' $MONITOR_XML 2>/dev/null)
+
+  # if position is defined for current monitor, add its position and orientation to command line parameters
+  [ -n "$POS_X" ] && PARAM_ARR=("${PARAM_ARR[@]}" "--output" "$NAME" "--pos" "${POS_X}x${POS_Y}" "--fbmm" "${WIDTH}x${HEIGHT}" "--rate" "$RATE")
+ 
+  # if monitor is defined as primary, adds it to command line parameters
+  [ "$PRIMARY" = "yes" ] && PARAM_ARR=("${PARAM_ARR[@]}" "--primary")
+done
+
+# get number of disabled monitors
+NUM=$(xmllint --xpath 'count(//monitors[@version="2"]/configuration[1]/disabled/monitorspec)' $MONITOR_XML)
+
+# loop through disabled monitors
+for (( i=1; i<=$NUM; i++)); do
+  # get connector name of current monitor
+  NAME=$(xmllint --xpath 'string(//monitors[@version="2"]/configuration[1]/disabled/monitorspec['$i']/connector/text())' $MONITOR_XML 2>/dev/null)
+
+  # if name of connector is defined for current monitor, make sure it is turned off
+  [ -n "$NAME" ] && PARAM_ARR=("${PARAM_ARR[@]}" "--output" "$NAME" "--off")
+done
+
+# if needed, wait for some seconds (for X to finish initialisation)
+[ -n "$1" ] && sleep $1
+
+# position all monitors
+xrandr "${PARAM_ARR[@]}"
+#echo xrandr "${PARAM_ARR[@]}"
