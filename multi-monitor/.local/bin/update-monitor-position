@@ -49,10 +49,10 @@ NUM=$(xmllint --xpath 'count(//monitors[@version="2"]/configuration[1]/disabled/
 # loop through disabled monitors
 for (( i=1; i<=$NUM; i++)); do
   # get connector name of current monitor
-  NAME=$(xmllint --xpath 'string(//monitors[@version="2"]/configuration[1]/logicalmonitor['$i']/monitor/monitorspec/connector/text())' $MONITOR_XML 2>/dev/null)
+  NAME=$(xmllint --xpath 'string(//monitors[@version="2"]/configuration[1]/disabled/monitorspec['$i']/connector/text())' $MONITOR_XML 2>/dev/null)
 
   # if name of connector is defined for current monitor, make sure it is turned off
-  [ -n "$NAME" ] && PARAM_ARR=("${PARAM_ARR[@]}" "$NAME" "--off")
+  [ -n "$NAME" ] && PARAM_ARR=("${PARAM_ARR[@]}" "--output" "$NAME" "--off")
 done
 
 # if needed, wait for some seconds (for X to finish initialisation)
@@ -60,3 +60,4 @@ done
 
 # position all monitors
 xrandr "${PARAM_ARR[@]}"
+#echo xrandr "${PARAM_ARR[@]}"
