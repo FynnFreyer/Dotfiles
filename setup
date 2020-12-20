@@ -1,11 +1,32 @@
 #!/bin/bash
 
+ufw enable
+
 apt update && apt upgrade -yq
+
+# system utils
 apt install -yq --no-install-recommends \
 	gparted \
 	exfat-utils \
+	lvm2 \
+	libxml2-utils \
 	git \
 	stow \
 	neovim
+
+# artsy stuff
+add-apt-repository -y ppa:inkscape.dev/stable
+apt update && apt install -yq --no-install-recommends \
+	inkscape \
+	gimp \
+	shotwell
+
+# utils
+add-apt-repository -y ppa:phoerious/keepassxc
+apt update && apt install -yq --no-install-recommends \
+	keepassxc \
+	gnome-tweak-tool \
+	gnome-shell-extensions \
+	gnome-shell-extension-appindicator
 
 reboot
