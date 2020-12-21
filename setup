@@ -1,8 +1,11 @@
 #!/bin/bash
 
 ufw enable
+[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
 
-apt update && apt upgrade -yq
+
+apt update -q && apt upgrade -yq
+
 
 # system utils
 apt install -yq --no-install-recommends \
@@ -10,23 +13,36 @@ apt install -yq --no-install-recommends \
 	exfat-utils \
 	lvm2 \
 	libxml2-utils \
-	git \
 	stow \
+        gnome-tweak-tool \
+        gnome-shell-extensions \
+        gnome-shell-extension-appindicator
+
+
+# development utils
+apt install -yq --no-install-recommends \
+	git \
 	neovim
 
+
 # artsy stuff
-add-apt-repository -y ppa:inkscape.dev/stable
-apt update && apt install -yq --no-install-recommends \
+add-apt-repository -yq ppa:inkscape.dev/stable
+apt update -q && apt install -yq --no-install-recommends \
 	inkscape \
 	gimp \
 	shotwell
 
-# utils
-add-apt-repository -y ppa:phoerious/keepassxc
-apt update && apt install -yq --no-install-recommends \
+# user progs
+add-apt-repository -yq ppa:phoerious/keepassxc
+apt update -q && apt install -yq --no-install-recommends \
 	keepassxc \
-	gnome-tweak-tool \
-	gnome-shell-extensions \
-	gnome-shell-extension-appindicator
+	libreoffice-writer \
+	libreoffice-calc
+
+
+[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
+git config --global user.email "fynn.freyer@googlemail.com"
+git config --global user.name "Fynn Freyer"
+
 
 reboot
