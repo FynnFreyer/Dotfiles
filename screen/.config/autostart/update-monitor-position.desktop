@@ -1,8 +1,10 @@
 [Desktop Entry]
 Type=Application
-Exec=update-monitor-position 5
-Hidden=true
+Exec=update-monitor-position 2
+Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
 Name[en_US]=update-monitor-position
 Name=update-monitor-position
+Comment[en_US]=Update monitor position according to monitors.xml
+Comment=Update monitor position according to monitors.xml

@@ -60,4 +60,5 @@ done
 
 # position all monitors
 xrandr "${PARAM_ARR[@]}"
+touch $HOME/dbg
 #echo xrandr "${PARAM_ARR[@]}"
