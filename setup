@@ -1,11 +1,9 @@
 #!/bin/bash
 
 ufw enable
-[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
 
 
 apt update -q && apt upgrade -yq
-
 
 # system utils
 apt install -yq --no-install-recommends \
@@ -19,12 +17,12 @@ apt install -yq --no-install-recommends \
         gnome-shell-extensions \
         gnome-shell-extension-appindicator
 
-
 # development utils
 apt install -yq --no-install-recommends \
 	git \
-	neovim
-
+	neovim \
+	python3-pip \
+	ghc
 
 # artsy stuff
 add-apt-repository -yq ppa:inkscape.dev/stable
@@ -33,19 +31,40 @@ apt update -q && apt install -yq --no-install-recommends \
 	gimp \
 	shotwell
 
-# user progs
+# productivity
 add-apt-repository -yq ppa:phoerious/keepassxc
 add-apt-repository -yq ppa:andreasbutti/xournalpp-master
 apt update -q && apt install -yq --no-install-recommends \
 	keepassxc \
 	xournalpp \
 	libreoffice-writer \
-	libreoffice-calc
+	libreoffice-calc \
+	libreoffice-help-en-us \
+	hunspell-de-de \
+	libreoffice-grammarcheck-de-de \
+	hunspell-en-us \
+	libreoffice-grammarcheck-en-us
+
+# convenience
+apt update -q && apt install -yq --no-install-recommends \
+	xdotool
+
+# convenience
+apt update -q && apt install -yq --no-install-recommends \
+        shotwell \
+	vlc \
+	rhythmbox \
+	rhythmbox-plugins
 
 
+# set up identification
 [ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
 git config --global user.email "fynn.freyer@googlemail.com"
 git config --global user.name "Fynn Freyer"
+
+
+# set gnome preferences
+gsettings set org.gnome.shell.extensions.dash-to-dock click-action minimize
 
 
 reboot
