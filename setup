@@ -14,6 +14,7 @@ apt install -yq --no-install-recommends \
 	lvm2 \
 	libxml2-utils \
 	stow \
+	dconf-editor \
         gnome-tweak-tool \
         gnome-shell-extensions \
         gnome-shell-extension-appindicator
@@ -34,8 +35,10 @@ apt update -q && apt install -yq --no-install-recommends \
 
 # user progs
 add-apt-repository -yq ppa:phoerious/keepassxc
+add-apt-repository -yq ppa:andreasbutti/xournalpp-master
 apt update -q && apt install -yq --no-install-recommends \
 	keepassxc \
+	xournalpp \
 	libreoffice-writer \
 	libreoffice-calc
 
