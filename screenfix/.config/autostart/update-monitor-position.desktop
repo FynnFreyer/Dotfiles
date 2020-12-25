@@ -1,10 +1,10 @@
 [Desktop Entry]
 Type=Application
-Exec=update-monitor-position 2
+Exec=screenfix-daemon
 Hidden=false
 NoDisplay=false
 X-GNOME-Autostart-enabled=true
-Name[en_US]=update-monitor-position
-Name=update-monitor-position
+Name[en_US]=screenfix-daemon
+Name=screenfix-daemon
 Comment[en_US]=Update monitor position according to monitors.xml
 Comment=Update monitor position according to monitors.xml

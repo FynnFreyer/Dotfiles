@@ -1,9 +1,0 @@
-#!/bin/bash
-
-dbus-monitor --session "type='signal',interface='org.gnome.ScreenSaver'" |
-  while read x; do
-    case "$x" in 
-      *"boolean true"*) update-monitor-position 2;;
-    esac
-  done
-

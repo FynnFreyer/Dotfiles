@@ -11,6 +11,8 @@ apt install -yq --no-install-recommends \
 	exfat-utils \
 	lvm2 \
 	libxml2-utils \
+	xdotool \
+	curl \
 	stow \
 	dconf-editor \
         gnome-tweak-tool \
@@ -24,12 +26,15 @@ apt install -yq --no-install-recommends \
 	python3-pip \
 	ghc
 
-# artsy stuff
+# media programs
 add-apt-repository -yq ppa:inkscape.dev/stable
 apt update -q && apt install -yq --no-install-recommends \
 	inkscape \
 	gimp \
-	shotwell
+        shotwell \
+        vlc \
+        rhythmbox \
+        rhythmbox-plugins
 
 # productivity
 add-apt-repository -yq ppa:phoerious/keepassxc
@@ -45,17 +50,6 @@ apt update -q && apt install -yq --no-install-recommends \
 	hunspell-en-us \
 	libreoffice-grammarcheck-en-us
 
-# convenience
-apt update -q && apt install -yq --no-install-recommends \
-	xdotool
-
-# convenience
-apt update -q && apt install -yq --no-install-recommends \
-        shotwell \
-	vlc \
-	rhythmbox \
-	rhythmbox-plugins
-
 
 # set up identification
 [ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
@@ -63,8 +57,54 @@ git config --global user.email "fynn.freyer@googlemail.com"
 git config --global user.name "Fynn Freyer"
 
 
-# set gnome preferences
-gsettings set org.gnome.shell.extensions.dash-to-dock click-action minimize
+# set gnome preferences and shortcuts
+
+# minimize/preview windows when clicked in dock
+gsettings set \
+	org.gnome.shell.extensions.dash-to-dock \
+	click-action 'minimize-or-previews'
+
+
+# set ctrl-alt-x to launch xkill
+gsettings set \
+	org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+	name 'Launch xkill'
+gsettings set \
+	org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+	command 'xkill'
+gsettings set \
+        org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+	binding '<Primary><Alt>x'
+
+# set ctrl-alt-delete to launch gnome-system-monitor (and unset logout)
+gsettings set \
+	org.gnome.settings-daemon.plugins.media-keys \
+	logout []
+gsettings set \
+        org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+        name 'Launch system monitor'
+gsettings set \
+        org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+        command 'gnome-system-monitor'
+gsettings set \
+        org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
+        binding '<Primary><Alt>Delete'
+
+# nautilus settings
+# don't show thumbnails
+gsettings set \
+	org.gnome.nautilus.preferences \
+	show-image-thumbnails 'never'
+
+# show create link option in context menu
+gsettings set \
+	org.gnome.nautilus.preferences \
+	show-create-link true
+
+# don't show a warning in system mon when killing a proc
+gsettings set \
+	org.gnome.gnome-system-monitor \
+	kill-dialog true
 
 
 reboot
