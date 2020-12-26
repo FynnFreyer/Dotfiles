@@ -6,7 +6,6 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-
 # enable firewall
 ufw enable
 
@@ -15,6 +14,7 @@ apt update && apt upgrade -y  &>/dev/null
 
 # installing programs
 ## system utils
+
 apt install -y --no-install-recommends \
 	stow \
 	gparted \
@@ -23,6 +23,7 @@ apt install -y --no-install-recommends \
 	lvm2 \
 	libxml2-utils \
 	xdotool \
+	rename \
 	curl \
 	dconf-editor \
         gnome-tweak-tool \
@@ -30,15 +31,22 @@ apt install -y --no-install-recommends \
         gnome-shell-extension-appindicator
 
 # development
+snap install pycharm-professional --classic
 apt install -y --no-install-recommends \
 	git \
 	neovim \
 	python3-pip \
 	ghc
 
-pip3 install pynvim jedi
+pip3 completion -b >> ~/.bashrc
+pip3 install pynvim jedi yapf pylint
 
-snap install pycharm-professional --classic
+add-apt-repository ppa:fontforge/fontforge -y
+apt update && apt install -y \
+	fontforge
+
+echo export VISUAL=vim >> ~/.bashrc
+echo export EDITOR="\$VISUAL" >> ~/.bashrc
 
 ## media
 add-apt-repository ppa:inkscape.dev/stable -y
@@ -125,6 +133,11 @@ gsettings set \
 cd ~
 git clone https://github.com/FynnFreyer/.dotfiles.git
 cd .dotfiles
+
+
+sed -i 's/gedit/vim/' /usr/share/applications/defaults.list
+stow vim
+
 
 ## install password db and config
 stow passwords
