@@ -1,19 +1,27 @@
 #!/bin/bash
 
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+
 ufw enable
 
 
+# installing dependencies
 apt update -q && apt upgrade -yq
-
 # system utils
 apt install -yq --no-install-recommends \
+	stow \
 	gparted \
 	exfat-utils \
+	cryfs \
 	lvm2 \
 	libxml2-utils \
 	xdotool \
 	curl \
-	stow \
 	dconf-editor \
         gnome-tweak-tool \
         gnome-shell-extensions \
@@ -25,6 +33,8 @@ apt install -yq --no-install-recommends \
 	neovim \
 	python3-pip \
 	ghc
+
+snap install -yq pycharm-professional
 
 # media programs
 add-apt-repository -yq ppa:inkscape.dev/stable
@@ -58,14 +68,12 @@ git config --global user.name "Fynn Freyer"
 
 
 # set gnome preferences and shortcuts
-
-# minimize/preview windows when clicked in dock
+## minimize/preview windows when clicked in dock
 gsettings set \
 	org.gnome.shell.extensions.dash-to-dock \
 	click-action 'minimize-or-previews'
 
-
-# set ctrl-alt-x to launch xkill
+## set ctrl-alt-x to launch xkill
 gsettings set \
 	org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
 	name 'Launch xkill'
@@ -76,7 +84,7 @@ gsettings set \
         org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
 	binding '<Primary><Alt>x'
 
-# set ctrl-alt-delete to launch gnome-system-monitor (and unset logout)
+## set ctrl-alt-delete to launch gnome-system-monitor (and unset logout)
 gsettings set \
 	org.gnome.settings-daemon.plugins.media-keys \
 	logout []
@@ -90,21 +98,41 @@ gsettings set \
         org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ \
         binding '<Primary><Alt>Delete'
 
-# nautilus settings
-# don't show thumbnails
+## nautilus settings
+### don't show thumbnails
 gsettings set \
 	org.gnome.nautilus.preferences \
 	show-image-thumbnails 'never'
 
-# show create link option in context menu
+### show create link option in context menu
 gsettings set \
 	org.gnome.nautilus.preferences \
 	show-create-link true
 
-# don't show a warning in system mon when killing a proc
+## don't show a warning in system mon when killing a proc
 gsettings set \
 	org.gnome.gnome-system-monitor \
 	kill-dialog true
+
+
+# setup
+## download dotfiles and install passwords and vpn profiles
+cd ~
+git clone https://github.com/FynnFreyer/.dotfiles.git
+cd .dotfiles
+
+## install passwords
+stow passwords
+
+## install vpn profiles
+echo manual intervention needed to unlock vpn
+mkdir tmp
+cryfs vpn tmp
+cd tmp
+ls | xargs -I {} nmcli connection import type openvpn file {}
+cd -
+cryfs-unmount tmp
+rm -d tmp
 
 
 reboot
