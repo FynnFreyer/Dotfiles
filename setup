@@ -2,7 +2,7 @@
 
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root\nComputer reboots in the end"
+  then echo "Please run as root"; echo "Computer reboots in the end"
   exit
 fi
 
@@ -11,11 +11,11 @@ fi
 ufw enable
 
 # get latest updates
-apt update -q && apt upgrade -yq
+apt update && apt upgrade -y  &>/dev/null
 
 # installing programs
 ## system utils
-apt install -yq --no-install-recommends \
+apt install -y --no-install-recommends \
 	stow \
 	gparted \
 	exfat-utils \
@@ -30,41 +30,44 @@ apt install -yq --no-install-recommends \
         gnome-shell-extension-appindicator
 
 # development
-apt install -yq --no-install-recommends \
+apt install -y --no-install-recommends \
 	git \
 	neovim \
 	python3-pip \
 	ghc
 
-snap install -yq pycharm-professional
+pip3 install pynvim jedi
+
+snap install pycharm-professional --classic
 
 ## media
-add-apt-repository ppa:inkscape.dev/stable -yq
-apt update -q && apt install -yq --no-install-recommends \
+add-apt-repository ppa:inkscape.dev/stable -y
+apt update && apt install -y --no-install-recommends \
 	inkscape \
 	gimp \
         shotwell \
         vlc \
         rhythmbox \
-        rhythmbox-plugins
+        rhythmbox-plugins \
+	filezilla \
+	transmission
 
 ## productivity
-add-apt-repository ppa:phoerious/keepassxc -yq
-add-apt-repository ppa:andreasbutti/xournalpp-master -yq
-apt update -q && apt install -yq --no-install-recommends \
+add-apt-repository ppa:phoerious/keepassxc -y
+add-apt-repository ppa:andreasbutti/xournalpp-master -y
+apt update && apt install -y --no-install-recommends \
 	keepassxc \
 	xournalpp \
 	libreoffice-writer \
 	libreoffice-calc \
 	libreoffice-help-en-us \
 	hunspell-de-de \
-	libreoffice-grammarcheck-de-de \
 	hunspell-en-us \
 	libreoffice-grammarcheck-en-us
 
 
 # set up identification
-[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ecdsa -N ""
+[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ -N ""
 git config --global user.email "fynn.freyer@googlemail.com"
 git config --global user.name "Fynn Freyer"
 

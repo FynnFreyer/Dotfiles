@@ -1,0 +1,20 @@
+set autoindent
+set backspace=indent,eol,start
+set backup
+set history=50
+set incsearch
+set ruler
+set showcmd
+
+map Q gq
+
+vnoremap _g y:exe "grep /" . escape(@", '\\/') . "/ *.c *.h"<CR>
+
+syntax on
+set hlsearch
+
+call neomake#configure#automake('nrwi', 1000)
+
+
+
+
