@@ -2,17 +2,19 @@
 
 
 if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
+  then echo "Please run as root\nComputer reboots in the end"
   exit
 fi
 
 
+# enable firewall
 ufw enable
 
-
-# installing dependencies
+# get latest updates
 apt update -q && apt upgrade -yq
-# system utils
+
+# installing programs
+## system utils
 apt install -yq --no-install-recommends \
 	stow \
 	gparted \
@@ -27,7 +29,7 @@ apt install -yq --no-install-recommends \
         gnome-shell-extensions \
         gnome-shell-extension-appindicator
 
-# development utils
+# development
 apt install -yq --no-install-recommends \
 	git \
 	neovim \
@@ -36,8 +38,8 @@ apt install -yq --no-install-recommends \
 
 snap install -yq pycharm-professional
 
-# media programs
-add-apt-repository -yq ppa:inkscape.dev/stable
+## media
+add-apt-repository ppa:inkscape.dev/stable -yq
 apt update -q && apt install -yq --no-install-recommends \
 	inkscape \
 	gimp \
@@ -46,9 +48,9 @@ apt update -q && apt install -yq --no-install-recommends \
         rhythmbox \
         rhythmbox-plugins
 
-# productivity
-add-apt-repository -yq ppa:phoerious/keepassxc
-add-apt-repository -yq ppa:andreasbutti/xournalpp-master
+## productivity
+add-apt-repository ppa:phoerious/keepassxc -yq
+add-apt-repository ppa:andreasbutti/xournalpp-master -yq
 apt update -q && apt install -yq --no-install-recommends \
 	keepassxc \
 	xournalpp \
@@ -116,23 +118,25 @@ gsettings set \
 
 
 # setup
-## download dotfiles and install passwords and vpn profiles
+## download dotfile repo
 cd ~
 git clone https://github.com/FynnFreyer/.dotfiles.git
 cd .dotfiles
 
-## install passwords
+## install password db and config
 stow passwords
 
-## install vpn profiles
+## install secrets
 echo manual intervention needed to unlock vpn
 mkdir tmp
 cryfs vpn tmp
 cd tmp
+
+### vpn profiles
 ls | xargs -I {} nmcli connection import type openvpn file {}
 cd -
 cryfs-unmount tmp
 rm -d tmp
 
 
-reboot
+#reboot
