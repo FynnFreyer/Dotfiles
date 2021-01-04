@@ -147,7 +147,7 @@ cd ~
 git clone https://github.com/FynnFreyer/.dotfiles.git
 cd .dotfiles
 
-
+## make vim default editor
 sed -i 's/gedit/vim/' /usr/share/applications/defaults.list
 stow vim
 
@@ -156,7 +156,7 @@ stow vim
 stow passwords
 
 ## install secrets
-echo manual intervention needed to unlock vpn
+echo manual unlock needed to install secrets \(vpn profiles and ssh keys\)
 ### unlock cryfs storage
 mkdir tmp
 cryfs secrets tmp
