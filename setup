@@ -19,6 +19,7 @@ apt install -y --no-install-recommends \
 	stow \
 	gparted \
 	exfat-utils \
+	ntfs-3g \
 	cryfs \
 	lvm2 \
 	libxml2-utils \
@@ -36,6 +37,7 @@ apt install -y --no-install-recommends \
 	git \
 	neovim \
 	python3-pip \
+	openjdk-14-jdk \
 	ghc
 
 pip3 completion -b >> ~/.bashrc
@@ -53,6 +55,8 @@ add-apt-repository ppa:inkscape.dev/stable -y
 apt update && apt install -y --no-install-recommends \
 	inkscape \
 	gimp \
+	gimp-help-de \
+	gimp-help-en \
         shotwell \
         vlc \
         rhythmbox \
@@ -68,14 +72,17 @@ apt update && apt install -y --no-install-recommends \
 	xournalpp \
 	libreoffice-writer \
 	libreoffice-calc \
+	libreoffice-help-de \
 	libreoffice-help-en-us \
 	hunspell-de-de \
 	hunspell-en-us \
+	hyphen-de \
+	hyphen-en-us \
 	libreoffice-grammarcheck-en-us
 
 
 # set up identification
-[ ! -f "$HOME/.ssh/id_ecdsa" ] && ssh-keygen -t ecdsa -f $HOME/.ssh/id_ -N ""
+[ ! -f "$HOME/.ssh/id_ed25519" ] && ssh-keygen -t ed25519 -f $HOME/.ssh/id_ed25519 -N ''
 git config --global user.email "fynn.freyer@googlemail.com"
 git config --global user.name "Fynn Freyer"
 
@@ -128,6 +135,12 @@ gsettings set \
 	kill-dialog true
 
 
+FOLDER=`gsettings get org.gnome.Terminal.ProfilesList default | cut -d "'" -f2 | cut -d "'" -f1`
+$(gsettings set "/org/gnome/terminal/legacy/profiles:/:$FOLDER/audible-bell" false)
+gsettings set "/org/gnome/terminal/legacy/profiles:/:$FOLDER/background-color" 'rgb(46,52,54)'
+gsettings set "/org/gnome/terminal/legacy/profiles:/:$FOLDER/"
+gsettings set "/org/gnome/terminal/legacy/profiles:/:$FOLDER/"
+
 # setup
 ## download dotfile repo
 cd ~
@@ -144,15 +157,25 @@ stow passwords
 
 ## install secrets
 echo manual intervention needed to unlock vpn
+### unlock cryfs storage
 mkdir tmp
-cryfs vpn tmp
+cryfs secrets tmp
 cd tmp
 
 ### vpn profiles
+cd tmp
 ls | xargs -I {} nmcli connection import type openvpn file {}
-cd -
+cd ..
+
+### ssh keys
+cd ssh
+cp $USER@$HOSTNAME.id* ~/.ssh/
+cd ..
+
+### relock cryfs storage
+cd ..
 cryfs-unmount tmp
 rm -d tmp
 
 
-#reboot
+reboot
