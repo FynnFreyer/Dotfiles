@@ -24,6 +24,7 @@ apt install -y --no-install-recommends \
 	lvm2 \
 	libxml2-utils \
 	xdotool \
+	xclip \
 	rename \
 	curl \
 	dconf-editor \

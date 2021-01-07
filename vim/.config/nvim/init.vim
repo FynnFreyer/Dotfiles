@@ -18,7 +18,6 @@ Plug 'w0rp/ale'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 Plug 'tpope/vim-surround'
 Plug 'arcticicestudio/nord-vim'
-Plug 'ryanoasis/vim-devicons'
 
 call plug#end()
 
@@ -26,11 +25,18 @@ set encoding=UTF-8
 
 set autoread
 set autowrite
-" 
+
+" Write file on .
 map . :w<CR>
+" Write and close file on ..
 map .. :x<CR>
+" Close file on qq
+map qq :qa!<CR>
+" Open quick search on ,
 map , :Files<CR>
-map ; :NERDTree<CR>
+" Toggle window switching with ;
+nnoremap ; <C-W>
+"map ; :NERDTree<CR>
 
 nnoremap <leader>t :terminal<CR>
 
@@ -48,15 +54,24 @@ let NERDTreeShowHidden=1
 colorscheme nord
 let g:lightline = {'colorscheme': 'solarized_dark'}
 
+" Use system clipboard
+set clipboard+=unnamedplus
+" Remap cut/copy/paste to "standard" shortcuts
+map <C-x> "+x
+map <C-c> "+y
+map <C-v> "+gP
 
-
+" Show command history
 set showcmd
 set history=50
 
+" Show line numbers and row:col ruler
 set ruler
 set number
 
+" Allow mouse control
 set mouse+=a
+" Set min distance (rows) between cursor and screen edge to 1
 set scrolloff=1
 
 set whichwrap+=<,>,[,]
@@ -104,12 +119,4 @@ inoremap {<CR> {<CR>}<ESC>O
 inoremap {;<CR> {<CR>};<ESC>O
 
 
-" loading icons
-let g:webdevicons_enable = 1
-" adding the flags to NERDTree
-let g:webdevicons_enable_nerdtree = 1
-" adding the custom source to unite
-let g:webdevicons_enable_unite = 1
-" Force extra padding in NERDTree so that the filetype icons line up vertically
-let g:WebDevIconsNerdTreeGitPluginForceVAlign = 1
 
