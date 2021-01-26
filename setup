@@ -32,6 +32,13 @@ apt install -y --no-install-recommends \
         gnome-shell-extensions \
         gnome-shell-extension-appindicator
 
+# nautilus addons
+apt install -y --no-install-recommends \
+	nautilus-admin \
+	nautilus-gtkhash \
+	nautilus-wipe \
+	nautilus-script-manager
+
 # development
 snap install pycharm-professional --classic
 apt install -y --no-install-recommends \
