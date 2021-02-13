@@ -1,23 +1,20 @@
 call plug#begin('~/.local/share/nvim/plugged')
 
+Plug 'altercation/vim-colors-solarized'
 Plug 'tpope/vim-eunuch'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tpope/vim-fugitive'
-Plug 'arcticicestudio/nord-vim'
+Plug 'preservim/nerdcommenter'
 Plug 'itchyny/lightline.vim'
 Plug 'davidhalter/jedi-vim'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
-Plug 'scrooloose/nerdcommenter'
+" Plug 'zchee/deoplete-jedi'
+Plug 'tbodt/deoplete-tabnine', { 'do': './install.sh' }
 Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 Plug 'tpope/vim-surround'
-Plug 'arcticicestudio/nord-vim'
 
 call plug#end()
 
@@ -51,15 +48,16 @@ autocmd BufWinEnter * silent NERDTreeMirror
 nnoremap <C-n> :NERDTreeMirror<CR>:NERDTreeFocus<CR>
 let NERDTreeShowHidden=1
 
-colorscheme nord
-let g:lightline = {'colorscheme': 'solarized_dark'}
-
 " Use system clipboard
-set clipboard+=unnamedplus
+set clipboard=unnamedplus
+set clipboard+=unnamed
+
 " Remap cut/copy/paste to "standard" shortcuts
-map <C-x> "+x
-map <C-c> "+y
-map <C-v> "+gP
+vnoremap <C-x> "+x
+vnoremap <C-c> "+y
+inoremap <C-v> <C-R><C-R>+
+nnoremap <C-v> "+gP
+
 
 " Show command history
 set showcmd
@@ -82,13 +80,21 @@ vnoremap _g y:exe "grep /" . escape(@", '\\/') . "/ *.c *.h"<CR>
 set autoindent
 set backspace=indent,eol,start
 
+" human friendly command completion
 set ignorecase
 set hlsearch
 set incsearch
 set showmatch
 
+" enable syntax highlighting
 syntax on
 filetype plugin indent on
+
+" set colorscheme
+set background=dark
+let g:solarized_termcolors=256
+colorscheme solarized
+let g:lightline = {'colorscheme': 'solarized_dark'}
 
 let g:python3_host_prog = '/usr/bin/python3'
 
@@ -109,14 +115,4 @@ let g:neoformat_basic_format_retab = 1
 let g:neoformat_basic_format_trim = 1
 " Enable linting
 let b:ale_linters = ['pylint']
-
-inoremap " ""<left>
-inoremap ' ''<left>
-inoremap ( ()<left>
-inoremap [ []<left>
-inoremap { {}<left>
-inoremap {<CR> {<CR>}<ESC>O
-inoremap {;<CR> {<CR>};<ESC>O
-
-
 
