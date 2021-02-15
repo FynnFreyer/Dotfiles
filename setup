@@ -3,7 +3,7 @@
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"; echo "Computer reboots in the end"
-  exit
+  exit 1
 fi
 
 # enable firewall
