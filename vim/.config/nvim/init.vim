@@ -28,14 +28,23 @@ if !exists(":SV")
 endif
 let $home=expand("$HOME")
 
+" Rules for interface and basic behaviour should preferably be loaded first
 source $home/.config/nvim/interface.vimrc
+" Rules for indentation
 source $home/.config/nvim/indent.vimrc
+" Fix for 'normal' copy/paste operations
 source $home/.config/nvim/paste.vimrc
+" Rules and key mappings for navigation and buffer control
 source $home/.config/nvim/navigation.vimrc
+" Set color scheme
 source $home/.config/nvim/color.vimrc
+" Rules and key mappings for automated formatting
 source $home/.config/nvim/format.vimrc
+" Rules and key mappings for linting (pylint via ale)
 source $home/.config/nvim/lint.vimrc
+" Rules and key mappings for autocompletion (tab nine and jedi via deoplete)
 source $home/.config/nvim/autocomplete.vimrc
-source $home/.config/nvim/plugins/nerdtree.vimrc
-source $home/.config/nvim/plugins/nerdcommenter.vimrc
+" Rules and key mappings for nerdtree and nerdcommenter
+source $home/.config/nvim/nerdtree.vimrc
+source $home/.config/nvim/nerdcommenter.vimrc
 

@@ -29,11 +29,12 @@ inoremap <M-Right> <C-o>g;
 
 " FILE/BUFFER ACTIONS
 " Write file on .
-map . :w<CR>
+nnoremap ww :w<CR>
 " Write and close file on ..
-map .. :x<CR>
+nnoremap wq :x<CR>
 " Close file/vim on qq/QQ
 nnoremap qq :q<CR>
+nnoremap qQ :q!<CR>
 nnoremap QQ :qa!<CR>
 " Open quick search on ,,
 nnoremap ,, :Files<CR>
@@ -47,11 +48,16 @@ set splitright
 " Split help to the top
 autocmd FileType help wincmd K
 
-" open terminal on bottom with 10% height on <leader>t
+" Open terminal on bottom with 10% height on <leader>t
 nnoremap <leader>t :split <bar> resize 10 <bar> terminal<CR>i
+" Add mappings for python3, xonsh, java and haskell
+nnoremap <leader>tp :split <bar> resize 10 <bar> terminal python3<CR>i
+nnoremap <leader>tx :split <bar> resize 10 <bar> terminal xonsh<CR>i
+nnoremap <leader>tj :split <bar> resize 10 <bar> terminal jshell<CR>i
+nnoremap <leader>th :split <bar> resize 10 <bar> terminal ghci<CR>i
+
 " enable <Esc> in terminal mode
 tnoremap <Esc> <C-\><C-N>
 " Automatically change to directory of current file
 set autochdir
-
 

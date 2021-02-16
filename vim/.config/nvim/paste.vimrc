@@ -11,3 +11,4 @@ vnoremap <C-c> "+y
 inoremap <C-v> <C-o>"+gP
 nnoremap <C-v> "+gP
 tnoremap <C-v> <C-\><C-N>"+gPi
+
