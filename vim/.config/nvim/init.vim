@@ -15,11 +15,14 @@ Plug 'sbdchd/neoformat'
 Plug 'w0rp/ale'
 Plug 'sakhnik/nvim-gdb', { 'do': ':!./install.sh' }
 Plug 'tpope/vim-surround'
+Plug 'python-mode/python-mode', { 'for': 'python', 'branch': 'develop' }
 
 call plug#end()
 
 " Set python interpreter location
 let g:python3_host_prog = '/usr/bin/python3'
+"let g:pymode = 1
+"let g:pymode_options = 1
 
 " Define command :SV to (re)source vimrc file
 if !exists(":SV")
